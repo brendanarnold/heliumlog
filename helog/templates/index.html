@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Log a He transfer{% endblock %}
+
+{% block head %}{{ super() }}{% endblock %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h1>Log a transfer</h1>
+    
+{% from "_formhelpers.html" import render_field %}
+<form method="post" action="/">
+    <dl>
+    {{ render_field(form.user) }}
+    {{ render_field(form.meter) }}
+    {{ render_field(form.meter_before) }}
+    {{ render_field(form.meter_after) }}
+    {{ render_field(form.transport_dewar) }}
+    {{ render_field(form.transport_dewar_before) }}
+    {{ render_field(form.transport_dewar_after) }}
+    {{ render_field(form.cryostat) }}
+    {{ render_field(form.cryostat_before) }}
+    {{ render_field(form.cryostat_after) }}
+    </dl>
+    <p><input type="submit" value="Register">
+</form>
+   
+{% endblock %}
