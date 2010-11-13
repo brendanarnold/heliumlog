@@ -1,3 +1,4 @@
 glob:env/*
 glob:*.swp
 glob:*.pyc
+glob:*.sqlite

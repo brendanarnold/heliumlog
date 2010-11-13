@@ -17,6 +17,50 @@
 {% endwith %}
 
 <h1>Log a transfer</h1>
+
+<table class="transfers" border="1">
+{% if transfers %}
+    <tr>
+        <th rowspan="2">Transferred by</th>   
+        <th colspan="3">Meter</th>
+        <th colspan="3">Transport dewar</th>
+        <th colspan="3">Cryostat</th>
+        <th rowspan="2">Time</th>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>Before</th>
+        <th>After</th>
+        <th>Name</th>
+        <th>Before</th>
+        <th>After</th>
+        <th>Name</th>
+        <th>Before</th>
+        <th>After</th>
+    </tr>
+{% for transfer in transfers %}
+    <tr>
+        <td>{{ transfer['user'] }}</td>
+        <td>{{ transfer['meter'] }}</td>
+        <td>{{ transfer['meter_before'] }}</td>
+        <td>{{ transfer['meter_after'] }}</td>
+        <td>{{ transfer['transport_dewar'] }}</td>
+        <td>{{ transfer['transport_dewar_before'] }}</td>
+        <td>{{ transfer['transport_dewar_after'] }}</td>
+        <td>{{ transfer['cryostat'] }}</td>
+        <td>{{ transfer['cryostat_before'] }}</td>
+        <td>{{ transfer['cryostat_after'] }}</td>
+        <td>{{ transfer['time'] }}</td>
+    </tr>
+{% endfor %}
+{% else %}
+    <tr>
+        <td>No transfers logged yet ...</td>
+    </tr>    
+{% endif %}
+</table>
+
+
     
 {% from "_formhelpers.html" import render_field %}
 <form method="post" action="/">
