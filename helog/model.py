@@ -1,5 +1,6 @@
 from __future__ import with_statement
 from helog import app
+from flask import g
 from contextlib import closing
 import sqlite3
 
@@ -34,3 +35,26 @@ def create_db():
         with app.open_resource('schema.sql') as f:
             db.cursor().executescript(f.read())
         db.commit()
+
+# A function to easily query the db
+def query_db(query, args=(), one=False):
+    cur = g.db.execute(query, args)
+    rv = [dict((cur.description[idx][0], value)
+               for idx, value in enumerate(row)) for row in cur.fetchall()]
+    return (rv[0] if rv else None) if one else rv
+
+
+# A function to enter a new transfer
+def add_transfer(t):
+    g.db.execute('insert into entries (user, meter, meter_before, ' \
+        + 'meter_after, transport_dewar, transport_dewar_before, ' \
+        + 'transport_dewar_after, cryostat, cryostat_before, ' \
+        + 'cryostat_after, time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ' \
+        + '?, ?)', [t['user'], t['meter'], t['meter_before'], \
+        t['meter_after'], t['transport_dewar'], \
+        t['transport_dewar_before'], \
+        t['transport_dewar_after'], \
+        t['cryostat'], t['cryostat_before'], \
+        t['cryostat_after'], t['time']])
+    g.db.commit()
+    
