@@ -19,7 +19,7 @@
 <h1>Log a He transfer</h1>
     
 {% from "_formhelpers.html" import render_field %}
-<form method="post" action="/">
+<form method="post" action="{{ url_for('index') }}">
     <table class="layout">
         <tr>
             {{ render_field(form.user, 5) }}
