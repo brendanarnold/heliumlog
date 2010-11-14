@@ -22,10 +22,16 @@ ul.flashes {
     padding: 0px;
 }
 
-.flash {
+ul.flashes li.ok {
     background: #CEE5F5;
     padding: 0.5em;
     border: 1px solid #AACBE2;
+}
+
+ul.flashes li.error {
+    background: #DD6666;
+    padding: 0.5em;
+    border: 1px solid #BB2222;
 }
 
 table.transfers {

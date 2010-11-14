@@ -2,3 +2,4 @@ F9 - G24
 F11 - G27
 F19 - G19
 F1 - Yellow Magnet
+Other

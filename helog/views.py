@@ -21,12 +21,14 @@ def index():
         transfer['cryostat'] = model.cryostats[int(transfer['cryostat'])]
         transfer['time'] = datetime.datetime.now()
         model.add_transfer(transfer)
-        flash('Success! - Transfer logged at %s' % transfer['time'].strftime('%I:%M %p'))
+        flash('Success! - Transfer logged at %s' % transfer['time'].strftime('%I:%M %p'), 'ok')
+        # Reset the form
+        form = HeTransferForm()
     elif request.method == 'POST' and not form.validate():
-        flash('There was a problem with the submission ...')
+        flash('There was a problem with the submission ...', 'error')
     # Gather data for log
-    transfers = model.query_db('select * from entries order by time limit 10')
-    transfers.reverse()
+    transfers = model.query_db('select * from entries order by time desc limit 10')
+##     transfers = transfers[:10]
     for t in transfers:
         # Put date in a nicer format
         t['time'] = t['time'].strftime('%d-%m-%y %I:%M %p')
@@ -89,7 +91,6 @@ def report_excel(restrict_by, id):
         ('Boiled Off During Transfer',),
         ('Litres Transferred',),
         ('Transferred By',),
-        ('Notes',)
     )
     w = Workbook()
     ws = w.add_sheet(ws_title)
@@ -109,6 +110,8 @@ def report_excel(restrict_by, id):
     row_num = row_num + 1
     for i,t in enumerate(transfers):
         row_num = row_num + 1
+        boiled_off = (t['meter_after'] - t['meter_before']) * 0.757
+        amount_taken = t['transport_dewar_before'] - t['transport_dewar_after']
         ws.write(row_num, 0, t['time'].strftime('%d-%m-%Y %H:%M %p'))
         ws.write(row_num, 1, t['meter'])
         ws.write(row_num, 2, t['meter_before'])
@@ -119,18 +122,13 @@ def report_excel(restrict_by, id):
         ws.write(row_num, 7, t['cryostat'])
         ws.write(row_num, 8, t['cryostat_before'])
         ws.write(row_num, 9, t['cryostat_after'])
-##         ws.write(row_num, 10, amount_boiled_off)
-##         ws.write(row_num, 11, transfer.amount_taken)
-##         ws.write(row_num, 12, transfer.transferred_by.name)
-##         ws.write(row_num, 13, transfer.notes)
-        ws.write(row_num, 10, 0)
-        ws.write(row_num, 11, 0)
+        ws.write(row_num, 10, boiled_off)
+        ws.write(row_num, 11, amount_taken)
         ws.write(row_num, 12, t['user'])
-        ws.write(row_num, 13, 0)
     out_stream = StringIO()
     w.save(out_stream)
     return Response(out_stream.getvalue(), headers = {
-        'Content-disposition' : 'application; filename=HeTransfers_%s%s.xls' % (order_by, id),
+        'Content-disposition' : 'application; filename=HeTransfers_%s%s.xls' % (restrict_by, id),
         'Content-Type' : 'application/ms-excel' }
     )
 

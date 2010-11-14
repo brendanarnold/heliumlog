@@ -1,6 +1,6 @@
 import os
 
-PREFIX = r'helog'
+PREFIX = os.path.dirname(__file__)
 USER_LIST_FILENAME = os.path.join(PREFIX, r'users.txt')
 TRANSPORT_DEWAR_LIST_FILENAME = os.path.join(PREFIX, r'transport_dewars.txt')
 METER_LIST_FILENAME = os.path.join(PREFIX, r'meters.txt')
