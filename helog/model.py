@@ -21,7 +21,8 @@ cryostats = parse_list_file(app.config['CRYOSTAT_LIST_FILENAME'])
 
 # A function to access the data base
 def connect_db():
-    return sqlite3.connect(app.config['DB_FILENAME'])
+    return sqlite3.connect(app.config['DB_FILENAME'], \
+        detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
 
 # A function to create the database
 def create_db():

@@ -11,6 +11,6 @@ create table entries (
     cryostat string not null,
     cryostat_before integer not null,
     cryostat_after integer not null,
-    time datetime not null
+    time timestamp not null
 );
 
