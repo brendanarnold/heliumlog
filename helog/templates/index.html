@@ -10,13 +10,44 @@
   {% if messages %}
     <ul class="flashes">
     {% for message in messages %}
-      <li>{{ message }}</li>
+      <li class="flash">{{ message }}</li>
     {% endfor %}
     </ul>
   {% endif %}
 {% endwith %}
 
-<h1>Log a transfer</h1>
+<h1>Log a He transfer</h1>
+    
+{% from "_formhelpers.html" import render_field %}
+<form method="post" action="/">
+    <table class="layout">
+        <tr>
+            {{ render_field(form.user, 5) }}
+        </tr>
+        <tr>
+            {{ render_field(form.meter, 0) }}
+            {{ render_field(form.meter_before, 0) }}
+            {{ render_field(form.meter_after, 0) }}
+        </tr>
+        <tr>
+            {{ render_field(form.transport_dewar, 0) }}
+            {{ render_field(form.transport_dewar_before, 0) }}
+            {{ render_field(form.transport_dewar_after, 0) }}
+        </tr>
+        <tr>
+            {{ render_field(form.cryostat, 0) }}
+            {{ render_field(form.cryostat_before, 0) }}
+            {{ render_field(form.cryostat_after, 0) }}
+        </tr>
+        <tr>
+            <td colspan="6" align="right">
+                <input type="submit" value="Log a transfer">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<h2>Last 10 transfers ...</h2>
 
 <table class="transfers" border="1">
 {% if transfers %}
@@ -61,22 +92,5 @@
 </table>
 
 
-    
-{% from "_formhelpers.html" import render_field %}
-<form method="post" action="/">
-    <dl>
-    {{ render_field(form.user) }}
-    {{ render_field(form.meter) }}
-    {{ render_field(form.meter_before) }}
-    {{ render_field(form.meter_after) }}
-    {{ render_field(form.transport_dewar) }}
-    {{ render_field(form.transport_dewar_before) }}
-    {{ render_field(form.transport_dewar_after) }}
-    {{ render_field(form.cryostat) }}
-    {{ render_field(form.cryostat_before) }}
-    {{ render_field(form.cryostat_after) }}
-    </dl>
-    <p><input type="submit" value="Register">
-</form>
    
 {% endblock %}

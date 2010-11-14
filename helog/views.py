@@ -24,7 +24,8 @@ def index():
         t['time'] = datetime.datetime.strptime(t['time'], '%Y-%m-%d %H:%M:%S.%f').strftime('%d-%m-%y %I:%M %p')
     return render_template('index.html', form=form, transfers=transfers)
 
-@app.route('/report'):
+@app.route('/report')
+def report():
     '''Generates links to all the reports'''
     return render_template('report_index.html', \
         users=create_choices(model.users), \
