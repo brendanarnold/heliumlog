@@ -8,6 +8,7 @@ from xlwt import *
 from xlwt.ExcelFormulaParser import FormulaParseException
 from StringIO import StringIO
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Gather data from form
@@ -20,7 +21,9 @@ def index():
         transfer['cryostat'] = model.cryostats[int(transfer['cryostat'])]
         transfer['time'] = datetime.datetime.now()
         model.add_transfer(transfer)
-        flash('Success!')
+        flash('Success! - Transfer logged at %s' % transfer['time'].strftime('%I:%M %p'))
+    elif request.method == 'POST' and not form.validate():
+        flash('There was a problem with the submission ...')
     # Gather data for log
     transfers = model.query_db('select * from entries order by time limit 10')
     transfers.reverse()
@@ -39,47 +42,40 @@ def report_index():
         cryostats = create_choices(model.cryostats) \
     )
 
-@app.route('/report/csv/<order_by>/<int:id>')
-def report_csv(order_by, id):
-    '''Returns a report in csv format as a download'''
-    if order_by == 'user': 
+@app.route('/report/html/<restrict_by>/<int:id>')
+def report_html(restrict_by, id):
+    '''Returns a report in html'''
+    transfers = model.get_transfers(restrict_by, id)
+    if restrict_by == 'user':
         val = model.users[id]
-        transfers = model.query_db("select * from entries where user = ? order by time", [val])
-    if order_by == 'meter' : 
+    elif restrict_by == 'meter':
         val = model.meters[id]
-        transfers = model.query_db("select * from entries where meter = ? order by time", [val])
-    if order_by == 'transport_dewar' : 
+    elif restrict_by == 'transport_dewar':
         val = model.transport_dewars[id]
-        transfers = model.query_db("select * from entries where transport_dewar = ? order by time", [val])
-    if order_by == 'cryostat' : 
+    elif restrict_by == 'cryostat':
         val = model.cryostats[id]
-        transfers = model.query_db("select * from entries where cryostat = ? order by time", [val])
+    return render_template('report.html', transfers=transfers, restrict_by=restrict_by, val=val)
+    
+
+@app.route('/report/csv/<restrict_by>/<int:id>')
+def report_csv(restrict_by, id):
+    '''Returns a report in csv format as a download'''
+    transfers = model.get_transfers(restrict_by, id)
     out_stream = StringIO()
     out_stream.write('Name\tMeter\tMeter Before\tMeter After\tTransport Dewar\tTransport Dewar Before\tTransport Dewar After\tCryostat\tCryostat Before\tCryostat After\tTime\n')
     csv_writer = csv.writer(out_stream, delimiter='\t')
     for t in transfers:
         csv_writer.writerow([t['user'], t['meter'], t['meter_before'], t['meter_after'], t['transport_dewar'], t['transport_dewar_before'], t['transport_dewar_after'], t['cryostat'], t['cryostat_before'], t['cryostat_after'], t['time']])
     return Response(out_stream.getvalue(), headers = {
-        'Content-disposition' : 'application; filename=HeTransfers_%s%s.dat' % (order_by, id),
+        'Content-disposition' : 'application; filename=HeTransfers_%s%s.dat' % (restrict_by, id),
         'Content-Type' : 'text/css' }
     )
     
 
-@app.route('/report/excel/<order_by>/<int:id>')
-def report_excel(order_by, id):
+@app.route('/report/excel/<restrict_by>/<int:id>')
+def report_excel(restrict_by, id):
     '''Returns a report in Excel format as a download'''
-    if order_by == 'user': 
-        val = model.users[id]
-        transfers = model.query_db("select * from entries where user = ? order by time", [val])
-    if order_by == 'meter' : 
-        val = model.meters[id]
-        transfers = model.query_db("select * from entries where meter = ? order by time", [val])
-    if order_by == 'transport_dewar' : 
-        val = model.transport_dewars[id]
-        transfers = model.query_db("select * from entries where transport_dewar = ? order by time", [val])
-    if order_by == 'cryostat' : 
-        val = model.cryostats[id]
-        transfers = model.query_db("select * from entries where cryostat = ? order by time", [val])
+    transfers = model.get_transfers(restrict_by, id)
     # Work on the excel sheet
     header_style = XFStyle()
     header_style.font = Font()
@@ -148,3 +144,4 @@ def before_request():
 def after_request(response):
     g.db.close()
     return response
+

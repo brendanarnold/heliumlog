@@ -58,4 +58,20 @@ def add_transfer(t):
         t['cryostat'], t['cryostat_before'], \
         t['cryostat_after'], t['time']])
     g.db.commit()
-    
+
+# A helper function to retrieve transfers
+def get_transfers(restrict_by, id):
+    if restrict_by == 'user':
+        val = users[id]
+        transfers = query_db("select * from entries where user = ? order by time", [val])
+    if restrict_by == 'meter': 
+        val = meters[id]
+        transfers = query_db("select * from entries where meter = ? order by time", [val])
+    if restrict_by == 'transport_dewar': 
+        val = transport_dewars[id]
+        transfers = query_db("select * from entries where transport_dewar = ? order by time", [val])
+    if restrict_by == 'cryostat': 
+        val = cryostats[id]
+        transfers = query_db("select * from entries where cryostat = ? order by time", [val])
+    return transfers
+        

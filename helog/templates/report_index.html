@@ -22,7 +22,7 @@
 
     <ul>
     {% for user in users %}
-        <li>{{ user[1] }} [<a href="{{ url_for('report_csv', order_by='user', id=user[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', order_by='user', id=user[0]) }}">Excel file</a>]</li>
+        <li>{{ user[1] }} [<a href="{{ url_for('report_html', restrict_by='user', id=user[0]) }}">html</a>] [<a href="{{ url_for('report_csv', restrict_by='user', id=user[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', restrict_by='user', id=user[0]) }}">Excel file</a>]</li>
     {% endfor %}
     </ul>
 
@@ -30,7 +30,7 @@
 
     <ul>
     {% for meter in meters %}
-        <li>{{ meter[1] }} [<a href="{{ url_for('report_csv', order_by='meter', id=meter[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', order_by='meter', id=meter[0]) }}">Excel file</a>]</li>
+        <li>{{ meter[1] }} [<a href="{{ url_for('report_html', restrict_by='meter', id=meter[0]) }}">html</a>]  [<a href="{{ url_for('report_csv', restrict_by='meter', id=meter[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', restrict_by='meter', id=meter[0]) }}">Excel file</a>]</li>
     {% endfor %}
     </ul>
 
@@ -38,7 +38,7 @@
 
     <ul>
     {% for transport_dewar in transport_dewars %}
-        <li>{{ transport_dewar[1] }} [<a href="{{ url_for('report_csv', order_by='transport_dewar', id=transport_dewar[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', order_by='transport_dewar', id=transport_dewar[0]) }}">Excel file</a>]</li>
+        <li>{{ transport_dewar[1] }} [<a href="{{ url_for('report_html', restrict_by='transport_dewar', id=transport_dewar[0]) }}">html</a>]  [<a href="{{ url_for('report_csv', restrict_by='transport_dewar', id=transport_dewar[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', restrict_by='transport_dewar', id=transport_dewar[0]) }}">Excel file</a>]</li>
     {% endfor %}
     </ul>
 
@@ -46,7 +46,7 @@
 
     <ul>
     {% for cryostat in cryostats %}
-        <li>{{ cryostat[1] }} [<a href="{{ url_for('report_csv', order_by='cryostat', id=cryostat[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', order_by='cryostat', id=cryostat[0]) }}">Excel file</a>]</li>
+        <li>{{ cryostat[1] }} [<a href="{{ url_for('report_html', restrict_by='cryostat', id=cryostat[0]) }}">html</a>]  [<a href="{{ url_for('report_csv', restrict_by='cryostat', id=cryostat[0]) }}">csv file</a>] [<a href="{{ url_for('report_excel', restrict_by='cryostat', id=cryostat[0]) }}">Excel file</a>]</li>
     {% endfor %}
     </ul>
 
