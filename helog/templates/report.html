@@ -16,13 +16,10 @@
         <th rowspan="2">Transferred by</th>   
         <th colspan="3">Meter</th>
         <th colspan="3">Transport dewar</th>
-        <th colspan="3">Cryostat</th>
+        <th rowspan="2">Cryostat</th>
         <th rowspan="2">Time</th>
     </tr>
     <tr>
-        <th>Name</th>
-        <th>Before</th>
-        <th>After</th>
         <th>Name</th>
         <th>Before</th>
         <th>After</th>
@@ -40,8 +37,6 @@
         <td>{{ transfer['transport_dewar_before'] }}</td>
         <td>{{ transfer['transport_dewar_after'] }}</td>
         <td>{{ transfer['cryostat'] }}</td>
-        <td>{{ transfer['cryostat_before'] }}</td>
-        <td>{{ transfer['cryostat_after'] }}</td>
         <td>{{ transfer['time'] }}</td>
     </tr>
 {% endfor %}

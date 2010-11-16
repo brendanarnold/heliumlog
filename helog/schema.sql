@@ -9,8 +9,8 @@ create table entries (
     transport_dewar_before integer not null,  
     transport_dewar_after integer not null,  
     cryostat string not null,
-    cryostat_before integer not null,
-    cryostat_after integer not null,
+    ip string not null,
+    misc string,
     time timestamp not null
 );
 

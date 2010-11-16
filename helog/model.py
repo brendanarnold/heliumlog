@@ -9,6 +9,7 @@ def parse_list_file(filename):
     fh = open(filename, 'r')
     items = [s.strip() for s in fh.readlines() if s.strip() != '']
     items.sort()
+    items.append('Other') # Always have an 'other' option
     fh.close()
     return items
 
@@ -49,14 +50,14 @@ def query_db(query, args=(), one=False):
 def add_transfer(t):
     g.db.execute('insert into entries (user, meter, meter_before, ' \
         + 'meter_after, transport_dewar, transport_dewar_before, ' \
-        + 'transport_dewar_after, cryostat, cryostat_before, ' \
-        + 'cryostat_after, time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ' \
-        + '?, ?)', [t['user'], t['meter'], t['meter_before'], \
+        + 'transport_dewar_after, cryostat, ip, misc, time) values ' \
+        + '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', \
+        [t['user'], t['meter'], t['meter_before'], \
         t['meter_after'], t['transport_dewar'], \
         t['transport_dewar_before'], \
         t['transport_dewar_after'], \
-        t['cryostat'], t['cryostat_before'], \
-        t['cryostat_after'], t['time']])
+        t['cryostat'], t['ip'], \
+        t['misc'], t['time']])
     g.db.commit()
 
 # A helper function to retrieve transfers

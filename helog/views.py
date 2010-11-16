@@ -20,6 +20,8 @@ def index():
         transfer['transport_dewar'] = model.transport_dewars[int(transfer['transport_dewar'])]
         transfer['cryostat'] = model.cryostats[int(transfer['cryostat'])]
         transfer['time'] = datetime.datetime.now()
+        transfer['ip'] = request.remote_addr
+        transfer['misc'] = '' # Somewhere to pickle some extra info in the future
         model.add_transfer(transfer)
         flash('Success! - Transfer logged at %s' % transfer['time'].strftime('%I:%M %p'), 'ok')
         # Reset the form
@@ -64,10 +66,10 @@ def report_csv(restrict_by, id):
     '''Returns a report in csv format as a download'''
     transfers = model.get_transfers(restrict_by, id)
     out_stream = StringIO()
-    out_stream.write('Name\tMeter\tMeter Before\tMeter After\tTransport Dewar\tTransport Dewar Before\tTransport Dewar After\tCryostat\tCryostat Before\tCryostat After\tTime\n')
+    out_stream.write('Name\tMeter\tMeter Before\tMeter After\tTransport Dewar\tTransport Dewar Before\tTransport Dewar After\tCryostat\tTime\n')
     csv_writer = csv.writer(out_stream, delimiter='\t')
     for t in transfers:
-        csv_writer.writerow([t['user'], t['meter'], t['meter_before'], t['meter_after'], t['transport_dewar'], t['transport_dewar_before'], t['transport_dewar_after'], t['cryostat'], t['cryostat_before'], t['cryostat_after'], t['time']])
+        csv_writer.writerow([t['user'], t['meter'], t['meter_before'], t['meter_after'], t['transport_dewar'], t['transport_dewar_before'], t['transport_dewar_after'], t['cryostat'], t['time']])
     return Response(out_stream.getvalue(), headers = {
         'Content-disposition' : 'application; filename=HeTransfers_%s%s.dat' % (restrict_by, id),
         'Content-Type' : 'text/css' }
@@ -87,7 +89,7 @@ def report_excel(restrict_by, id):
         ('Time',),
         ('Meter', 'Name', 'Before', 'After'),
         ('Transport Dewar', 'Name', 'Before', 'After'),
-        ('Dewar', 'Name', 'Before', 'After'),
+        ('Cryostat',),
         ('Boiled Off During Transfer',),
         ('Litres Transferred',),
         ('Transferred By',),
@@ -120,11 +122,9 @@ def report_excel(restrict_by, id):
         ws.write(row_num, 5, t['transport_dewar_before'])
         ws.write(row_num, 6, t['transport_dewar_after'])
         ws.write(row_num, 7, t['cryostat'])
-        ws.write(row_num, 8, t['cryostat_before'])
-        ws.write(row_num, 9, t['cryostat_after'])
-        ws.write(row_num, 10, boiled_off)
-        ws.write(row_num, 11, amount_taken)
-        ws.write(row_num, 12, t['user'])
+        ws.write(row_num, 8, boiled_off)
+        ws.write(row_num, 9, amount_taken)
+        ws.write(row_num, 10, t['user'])
     out_stream = StringIO()
     w.save(out_stream)
     return Response(out_stream.getvalue(), headers = {

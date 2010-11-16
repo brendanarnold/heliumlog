@@ -20,7 +20,7 @@ class HeTransferForm(Form):
     transport_dewar_after = IntegerField('After', \
         [Required(message='Enter a number with no decimal')])
     cryostat = SelectField('Cryostat', choices=create_choices(cryostats))
-    cryostat_before = IntegerField('Before', \
-        [Required(message='Enter a number with no decimal')])
-    cryostat_after = IntegerField('After', \
-        [Required(message='Enter a number with no decimal')])
+##     cryostat_before = IntegerField('Before', \
+##         [Required(message='Enter a number with no decimal')])
+##     cryostat_after = IntegerField('After', \
+##         [Required(message='Enter a number with no decimal')])

@@ -1,12 +1,15 @@
-Green Magnet G19
-Green No Magnet G19
-Dilution Fridge G19
-Yellow Magnet
-Green Magnet G24 (Polo)
-Dilution Fridge G24
-Dipping Dewar G24
-Green Magnet G27
-Green Magnet Hayden Lab
-Squid
-Other
-
+F1 Yellow Magnet
+F2
+F3 TLM (G27)
+F4 Green Magnet (G27)
+F5
+F6
+F7 Polo (G24)
+F8
+F9 Dip Cryostat (G24)
+F10 Green Magnet (G19)
+F11 Dilution Fridge (G19)
+F12 Green Dewar (G19)
+F13 Dilution Fridge (G24)
+Hayden Green Magnet (G22)
+SQUID
