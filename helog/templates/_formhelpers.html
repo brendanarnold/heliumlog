@@ -1,7 +1,7 @@
 {% macro render_field(field, colspan) %}
     <td>{{ field.label }}</td>
     {% if colspan == 0 %}<td>{% else %}<td colspan="{{ colspan }}">{% endif %}
-    {{ field(**kwargs)|safe }}
+    {{ field|safe }}
     {% if field.errors %}
         <ul class="errors">
         {% for error in field.errors %}<li>{{ error }}{% endfor %}

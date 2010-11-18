@@ -2,7 +2,12 @@
 
 {% block title %}Log a He transfer{% endblock %}
 
-{% block head %}{{ super() }}{% endblock %}
+{% block head %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-1.4.4.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='he_calc.js') }}"></script>
+
+{% endblock %}
 
 {% block body %}
 
@@ -19,7 +24,7 @@
 <h1>Log a He transfer</h1>
     
 {% from "_formhelpers.html" import render_field %}
-<form method="post" action="{{ url_for('index') }}">
+<form id="log_transfer" method="post" action="{{ url_for('index') }}">
     <table class="layout">
         <tr>
             {{ render_field(form.user, 5) }}
@@ -37,12 +42,27 @@
         <tr>
             {{ render_field(form.cryostat, 5)}}
         </tr>
+<!--
         <tr>
             <td colspan="6" align="right">
                 <input type="submit" value="Log a transfer">
             </td>
         </tr>
+-->
+        <tr>
+            <td>Litres taken</td>
+            <td colspan="5" class="big_num" id="he_taken">N/A<td>
+        </tr>
+        <tr>
+            <td>Litres boiled off</td>
+            <td colspan="5" class="big_num" id="he_boiled_off">N/A</td>
+        </tr>
+        <tr>
+            <td>Approx. extra in cryostat</td>
+            <td colspan="5" class="big_num" id="he_in_cryostat">N/A</td>
+        </tr>    
     </table>
+    If this seems sensible, then <input type="submit" value="log the transfer">
 </form>
 
 <h2>Last 10 transfers ...</h2>

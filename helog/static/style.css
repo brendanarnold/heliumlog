@@ -70,3 +70,9 @@ ul.errors {
     background-position: 0px 2px; 
     padding-left: 16px; 
 }
+
+.big_num {
+    color: #478BB8;
+    font-size: 150%;
+    font-weight: bold;
+}
