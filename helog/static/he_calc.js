@@ -51,9 +51,33 @@ function calc_transfers() {
     } 
 }
 
+// Counts down the undo timeframe before changing the style
+function undo_countdown() {
+    // Have to hack this since flash doesn't allow HTML it seems
+    var undo_flash = $('.undo');
+    var url = undo_flash.html().split('|')[1];
+    var stem = undo_flash.html().split('|')[0];
+    var time_left = 30;
+    undo_flash.html(stem + ' - <span id="timer">' + time_left + '</span> seconds left to <a href="' + url + '">Undo</a>');
+    var timer_id = setInterval(function() {
+        if (time_left > 0) {
+            $('#timer').html(time_left);
+        } else {
+            clearInterval(timer_id);
+            undo_flash.html(stem);
+            undo_flash.addClass('ok');
+            undo_flash.removeClass('undo');
+        }
+        time_left = time_left - 1;
+    }, 1000);
+}
 $(document).ready(function() {
     calc_transfers();
     $("#log_transfer input").change(function(event) {
         calc_transfers();
     });
+    // Now see if 'undo' is present
+    if ($('.undo').length > 0) {
+        undo_countdown();
+    }
 });

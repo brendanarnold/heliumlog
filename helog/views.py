@@ -1,5 +1,5 @@
 from helog import app
-from flask import render_template, request, flash, g, Response
+from flask import render_template, request, flash, g, Response, url_for
 from forms import HeTransferForm, create_choices
 import model
 import datetime
@@ -23,7 +23,10 @@ def index():
         transfer['ip'] = request.remote_addr
         transfer['misc'] = '' # Somewhere to pickle some extra info in the future
         model.add_transfer(transfer)
-        flash('Success! - Transfer logged at %s' % transfer['time'].strftime('%I:%M %p'), 'ok')
+        # Find out id of new transfer
+        transfer = model.query_db('select * from entries order by time desc limit 1', one=True)
+        id = transfer['id']
+        flash('Success! - Transfer logged at %s |%s' % (transfer['time'].strftime('%I:%M %p'), url_for('undo', id=id)), 'undo')
         # Reset the form
         form = HeTransferForm()
     elif request.method == 'POST' and not form.validate():
@@ -35,6 +38,10 @@ def index():
         # Put date in a nicer format
         t['time'] = t['time'].strftime('%d-%m-%y %I:%M %p')
     return render_template('index.html', form=form, transfers=transfers)
+
+@app.route('/undo/<int:id>')
+def undo(id):
+    pass
 
 @app.route('/report')
 def report_index():

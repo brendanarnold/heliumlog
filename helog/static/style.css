@@ -34,6 +34,12 @@ ul.flashes li.error {
     border: 1px solid #BB2222;
 }
 
+ul.flashes li.undo{
+    background: #FFD840;
+    padding: 0.5em;
+    border: 1px solid #BFA230;
+}
+
 table.transfers {
     border: 1px solid #377BA8;
     background: #CEE5F5;
