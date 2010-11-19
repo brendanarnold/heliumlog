@@ -70,6 +70,9 @@ def report_index():
 def report_html(restrict_by, id):
     '''Returns a report in html'''
     transfers = model.get_transfers(restrict_by, id)
+    for t in transfers:
+        # Put date in a nicer format
+        t['time'] = t['time'].strftime('%d-%m-%y %I:%M %p')
     if restrict_by == 'user':
         val = model.users[id]
     elif restrict_by == 'meter':
