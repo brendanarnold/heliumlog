@@ -13,7 +13,7 @@ function calc_transfers() {
     if (isInteger(meter_before) && isInteger(meter_after)) {
         meter_before = parseInt(meter_before);
         meter_after = parseInt(meter_after);
-        boiled_off = (meter_after - meter_before)  / 0.757;
+        boiled_off = (meter_after - meter_before)  / 7.57;
         $('#he_boiled_off').html(Math.round(boiled_off));
     } else {
         $('#he_boiled_off').html('N/A');
@@ -43,7 +43,7 @@ function calc_transfers() {
         meter_before = parseInt(meter_before);
         meter_after = parseInt(meter_after);
         var taken = transport_dewar_before - transport_dewar_after;
-        var boiled_off = (meter_after - meter_before)  / 0.757;
+        var boiled_off = (meter_after - meter_before)  / 7.57;
         in_cryostat = taken - boiled_off;
         $('#he_in_cryostat').html(Math.round(in_cryostat));
     } else {

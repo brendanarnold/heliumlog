@@ -135,7 +135,7 @@ def report_excel(restrict_by, id):
     row_num = row_num + 1
     for i,t in enumerate(transfers):
         row_num = row_num + 1
-        boiled_off = (t['meter_after'] - t['meter_before']) * 0.757
+        boiled_off = (t['meter_after'] - t['meter_before']) / 7.57
         amount_taken = t['transport_dewar_before'] - t['transport_dewar_after']
         ws.write(row_num, 0, t['time'].strftime('%d-%m-%Y %H:%M %p'))
         ws.write(row_num, 1, t['meter'])
