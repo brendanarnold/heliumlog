@@ -60,6 +60,11 @@ def add_transfer(t):
         t['misc'], t['time']])
     g.db.commit()
 
+# A function to delete a trasnfer by id
+def delete_by_id(id):
+    g.db.execute('delete from entries where id = ?', [id])
+    g.db.commit()
+    
 # A helper function to retrieve transfers
 def get_transfers(restrict_by, id):
     if restrict_by == 'user':

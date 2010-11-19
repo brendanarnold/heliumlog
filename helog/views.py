@@ -1,5 +1,5 @@
 from helog import app
-from flask import render_template, request, flash, g, Response, url_for
+from flask import render_template, request, flash, g, Response, url_for, Markup, redirect
 from forms import HeTransferForm, create_choices
 import model
 import datetime
@@ -8,6 +8,9 @@ from xlwt import *
 from xlwt.ExcelFormulaParser import FormulaParseException
 from StringIO import StringIO
 
+# n.b. Time allowed in javascript before udo link dissappears - request
+# will be accepted for 15 extra second to allow for http lag
+TIME_TO_UNDO = 30
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -26,7 +29,9 @@ def index():
         # Find out id of new transfer
         transfer = model.query_db('select * from entries order by time desc limit 1', one=True)
         id = transfer['id']
-        flash('Success! - Transfer logged at %s |%s' % (transfer['time'].strftime('%I:%M %p'), url_for('undo', id=id)), 'undo')
+        flash(
+            Markup('Success! - Transfer logged at %s <span id="undo_text">- <span id="undo_counter">%d</span> seconds to <a href="%s">Undo</a></span>' % (transfer['time'].strftime('%I:%M %p'), TIME_TO_UNDO, url_for('undo', id=id))), \
+        'undo')
         # Reset the form
         form = HeTransferForm()
     elif request.method == 'POST' and not form.validate():
@@ -41,7 +46,15 @@ def index():
 
 @app.route('/undo/<int:id>')
 def undo(id):
-    pass
+    # Check ip matches and within timeframe
+    transfer = model.query_db('select * from entries where id = ? limit 1', [id], one=True)
+    secs_time_diff = (datetime.datetime.now() - transfer['time']).seconds
+    # Note: allow slightly longer margin for undo than specified to take
+    # into account http lag
+    if (request.remote_addr == transfer['ip']) and (secs_time_diff < (TIME_TO_UNDO + 15)):
+        model.delete_by_id(id)
+        flash('Transfer aborted!', 'error')
+    return redirect(url_for('index'))    
 
 @app.route('/report')
 def report_index():
