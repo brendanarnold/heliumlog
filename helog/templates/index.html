@@ -27,7 +27,14 @@
 <form id="log_transfer" method="post" action="{{ url_for('index') }}">
     <table class="layout">
         <tr>
-            {{ render_field(form.user, 5) }}
+            <td>{{ form.user.label }}</td>
+            <td colspan="2">{{ form.user|safe }}
+                {% if form.user.errors %}
+                <ul>
+                    {% for error in form.user.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}</td>
+            <td colspan="3"><em><small>Meter values should include a decimal point</small></em></td>
         </tr>
         <tr>
             {{ render_field(form.meter, 0) }}
